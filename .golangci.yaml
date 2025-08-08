@@ -1,0 +1,47 @@
+# Copyright (c) Kopexa GmbH
+# SPDX-License-Identifier: BUSL-1.1
+
+version: "2"
+run:
+  allow-serial-runners: true
+linters:
+  enable:
+    - bodyclose
+    - err113
+    - gocritic
+    - gocyclo
+    - gosec
+    - misspell
+    - mnd
+    - noctx
+    - revive
+    - staticcheck
+    - whitespace
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - totp/testing/*
+      - third_party$
+      - builtin$
+      - examples$
+issues:
+  fix: true
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    gofumpt:
+      extra-rules: true
+  exclusions:
+    generated: lax
+    paths:
+      - totp/testing/*
+      - third_party$
+      - builtin$
+      - examples$

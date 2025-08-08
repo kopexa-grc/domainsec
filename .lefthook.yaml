@@ -1,0 +1,25 @@
+# Copyright 2024 Kopexa GmbH. All rights reserved.
+# Use of this source code is governed by a BUSL-1.1 license that can be found in the LICENSE file.
+
+pre-commit:
+  parallel: true
+  commands:
+    license:
+      glob: "*.{go,mod}"
+      run: task license:fix
+    lint:
+      glob: "*.go"
+      run: task lint
+    test:
+      glob: "*.go"
+      run: task test:unit
+
+pre-push:
+  parallel: true
+  commands:
+    test:
+      glob: "*.go"
+      run: task test:unit
+    lint:
+      glob: "*.go"
+      run: task lint
