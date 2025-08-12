@@ -9,7 +9,7 @@ require (
 	github.com/projectdiscovery/httpx v1.7.1
 	github.com/projectdiscovery/naabu/v2 v2.3.5
 	github.com/projectdiscovery/subfinder/v2 v2.8.0
-	google.golang.org/protobuf v1.33.0
+	google.golang.org/protobuf v1.36.7
 )
 
 require (
