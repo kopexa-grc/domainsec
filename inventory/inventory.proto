@@ -1,0 +1,107 @@
+// Copyright (c) Kopexa GmbH.
+// SPDX-License-Identifier: BUSL-1.1
+
+syntax = "proto3";
+package domainsec.inventory.v1;
+
+option go_package = "github.com/kopexa/domainsec/inventory";
+
+// Wappalyzer
+message TechnologyDetail {
+    string description = 1; // Description of the application
+    string website = 2; // Website of the application
+    string cpe = 3; // Common Platform Enumeration (CPE) identifier
+    string icon = 4; // Base64 encoded icon of the application
+    repeated string categories = 5; // Categories the application belongs to
+}
+
+message Port {
+    int64 port = 1; // Port number
+    string protocol = 2; // Protocol used (e.g., "tcp", "udp")
+    bool tls = 3; // Indicates if the port is using TLS
+
+    ProtocolKind protocol_kind = 10;
+    TLSInfo tls_info = 11;
+    string service_name = 12;     // e.g., http, ssh, smtp
+    string banner = 13;           // raw or normalized banner
+    map<string,string> attributes = 14;
+}
+
+message HostEntry {
+    string domain = 1;
+    string source = 2;
+    string host = 3;
+
+    string content_type = 4;
+    string cdn_name = 5;
+    string cdn_type = 6;
+    string webserver = 7;
+    repeated string technologies = 8;
+
+    int32 status_code = 9;
+
+    string err = 10; // Error message if any
+
+    string sni = 11;
+    string title = 13;
+    string scheme = 14;
+    repeated string a_records = 15;
+    repeated string aaaa_records = 16;
+    bool cdn = 17; // Indicates if the host is behind a CDN
+    bytes screenshot_bytes = 18; // Base64 encoded screenshot bytes
+
+    map<string, TechnologyDetail> technology_details = 19; // W
+
+    repeated string cnames = 20;
+    repeated Port ports = 21; // List of ports associated with the host
+
+    // HTTP details to score posture/compliance
+    string final_url = 24;        // after redirects
+    int32 redirect_hops = 25;
+    HTTPHeaders http_headers = 26;
+
+    // DNS metadata (optional TTLs help debugging)
+    repeated int64 a_ttls = 27;       // align with a_records index
+    repeated int64 aaaa_ttls = 28;
+    repeated int64 cname_ttls = 29;
+
+    bool login_form_detected = 30;    // useful for privacy/security checks
+    bool cookies_over_http = 31;      // if seen, indicates risk
+    bool mixed_content_detected = 32; // for CSP/HSTS posture
+
+     map<string,string> labels = 40;
+     map<string,string> metadata = 41;
+     
+     TLSInfo tls_info = 42;
+}
+
+message HTTPHeaders {
+  // Security headers that we care for GRC dashboards
+  string content_security_policy = 1;
+  string strict_transport_security = 2;
+  string x_content_type_options = 3;
+  string x_frame_options = 4;
+  string referrer_policy = 5;
+  string permissions_policy = 6;
+  string cross_origin_opener_policy = 7;
+}
+
+
+message TLSInfo {
+  bool detected = 1;
+  string version = 2;          // e.g., TLS1.2/TLS1.3
+  string alpn = 3;             // e.g., h2,http/1.1
+  string cipher = 4;
+  string cert_issuer = 5;
+  string cert_subject = 6;
+  string cert_sha256 = 7;
+  string not_before = 8;       // RFC3339
+  string not_after = 9;        // RFC3339
+  repeated string sans = 10;
+}
+
+enum ProtocolKind {
+  PROTOCOL_UNSPECIFIED = 0;
+  PROTOCOL_TCP = 1;
+  PROTOCOL_UDP = 2;
+}

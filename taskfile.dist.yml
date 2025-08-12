@@ -36,6 +36,11 @@ tasks:
     cmds:
      - task: prep
 
+  clean:proto:
+    desc: Clean up generated proto files
+    cmds:
+      - find . -not -path './.*' \( -name '*.ranger.go' -or -name '*.pb.go' -or -name '*.actions.go' -or -name '*-packr.go' -or -name '*.swagger.json' \) -delete
+
   prep:
     desc: Prepare the project
     cmds:
@@ -56,6 +61,15 @@ tasks:
       - go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest # Ensure protoc-gen-go-grpc is installed
       - go install github.com/planetscale/vtprotobuf/cmd/protoc-gen-go-vtproto@latest # Ensure protoc-gen-go-vtproto is installed
 
+  prep:tools:protolint:
+    desc: Install Protolint
+    cmds:
+       - go install github.com/yoheimuta/protolint/cmd/protolint@latest
+
+  gen:
+    desc: Generate code for the project
+    cmds:
+      - go generate ./...
 
   license:check:
     desc: Check license headers in source files
