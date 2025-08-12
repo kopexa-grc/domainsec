@@ -1,3 +1,6 @@
+// Copyright (c) Kopexa GmbH
+// SPDX-License-Identifier: BUSL-1.1
+
 package scan
 
 import (
@@ -14,8 +17,8 @@ func TestFindHosts(t *testing.T) {
 	ctx := context.Background()
 
 	hosts := []*inventory.HostEntry{
-		{Host: "knk.de"},
-		//{Host: "kopexa.com"},
+		//{Host: "knk.de"},
+		{Host: "kopexa.com"},
 	}
 
 	for _, host := range hosts {
